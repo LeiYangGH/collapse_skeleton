@@ -22,24 +22,39 @@ if __name__ == "__main__":
                                                                                                         tref)))
 
 
-def max_food(building: Building) -> int:
-    cloned_building = deepcopy(building)
-    print(cloned_building)
-    total_food = 0
-    move_delta_lst = [(0, -1), (0, 1), (-1, 0), (1, 0)]
-    while cloned_building.can_move():
-        for (dr, dc) in move_delta_lst:
-            newr = cloned_building.player_row + dr
-            newc = cloned_building.player_col + dc
-            if cloned_building.is_collapsed(newr, newc):
-                continue
-            print(dr, dc)
-            cloned_building.move_player(dr, dc)
-            food = cloned_building.rooms[cloned_building.player_row][cloned_building.player_col].food
-            print(food)
-            total_food += food
+def is_direction_valid(building: Building, delta):
+    (dr, dc) = delta
+    newr = building.player_row + dr
+    newc = building.player_col + dc
+    return (not building.is_collapsed(newr, newc)) and building.is_valid(newr, newc)
 
-    print(total_food)
+
+directions_lst = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+
+all_paths_foods = []
+
+
+def calc_max_food(building: Building) -> int:
+    print(building)
+    global directions_lst
+    if building.can_move():
+        valid_directions = [d for d in directions_lst if is_direction_valid(building, d)]
+        print(f'valid_directions={valid_directions}')
+        for (dr, dc) in valid_directions:
+            print((dr, dc))
+            cloned_building = deepcopy(building)
+            print(f'player at {cloned_building.player_row} {cloned_building.player_col}')
+            cloned_building.move_player(dr, dc)
+            calc_max_food(cloned_building)
+    else:
+        print('*' * 70)
+        all_paths_foods.append(building.player_food)
+        return building.player_food
+
+
+def max_food(building: Building) -> int:
+    calc_max_food(building)
+    print(max(all_paths_foods))
     """returns the maximum number of food that can be collected from given building"""
     return building.size * 10  # dummy implementation - replace
 
