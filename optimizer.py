@@ -1,5 +1,6 @@
 from building import *
 from copy import deepcopy
+import sys
 
 # speed test - use "python optimizer.py" to run
 if __name__ == "__main__":
@@ -35,26 +36,35 @@ all_paths_foods = []
 
 
 def calc_max_food(building: Building) -> int:
-    print(building)
+    # print(building)
+    sys.stdout.write('.')
+    sys.stdout.flush()
     global directions_lst
     if building.can_move():
         valid_directions = [d for d in directions_lst if is_direction_valid(building, d)]
-        print(f'valid_directions={valid_directions}')
+        # print(f'valid_directions={valid_directions}')
+        sub_max=0
         for (dr, dc) in valid_directions:
-            print((dr, dc))
+            # print((dr, dc))
             cloned_building = deepcopy(building)
-            print(f'player at {cloned_building.player_row} {cloned_building.player_col}')
+            # print(f'player at {cloned_building.player_row} {cloned_building.player_col}')
             cloned_building.move_player(dr, dc)
+            if cloned_building.player_food > sub_max:
+                sub_max = cloned_building.player_food
             calc_max_food(cloned_building)
+
+        return sub_max + building.player_food
     else:
-        print('*' * 70)
+        # print('*' * 70)
         all_paths_foods.append(building.player_food)
         return building.player_food
 
 
 def max_food(building: Building) -> int:
-    calc_max_food(building)
+    print(building)
+    max1 = calc_max_food(building)
     print(max(all_paths_foods))
+    print(max1)
     """returns the maximum number of food that can be collected from given building"""
     return building.size * 10  # dummy implementation - replace
 
