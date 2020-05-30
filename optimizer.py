@@ -26,16 +26,19 @@ def max_food(building: Building) -> int:
     cloned_building = deepcopy(building)
     print(cloned_building)
     total_food = 0
-    while cloned_building.player_row >= 1:
-        print('move -1,0')
-        cloned_building.move_player(-1, 0);
-        total_food += cloned_building.rooms[cloned_building.player_row][cloned_building.player_col].food
-        # print(total_food)
-    while cloned_building.player_col >= 1:
-        print('move 0, -1')
-        cloned_building.move_player(0, -1);
-        total_food += cloned_building.rooms[cloned_building.player_row][cloned_building.player_col].food
-        # print(total_food)
+    move_delta_lst = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+    while cloned_building.can_move():
+        for (dr, dc) in move_delta_lst:
+            newr = cloned_building.player_row + dr
+            newc = cloned_building.player_col + dc
+            if cloned_building.is_collapsed(newr, newc):
+                continue
+            print(dr, dc)
+            cloned_building.move_player(dr, dc)
+            food = cloned_building.rooms[cloned_building.player_row][cloned_building.player_col].food
+            print(food)
+            total_food += food
+
     print(total_food)
     """returns the maximum number of food that can be collected from given building"""
     return building.size * 10  # dummy implementation - replace
