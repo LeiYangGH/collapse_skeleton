@@ -1,4 +1,5 @@
 from building import *
+from copy import deepcopy
 
 # speed test - use "python optimizer.py" to run
 if __name__ == "__main__":
@@ -22,17 +23,18 @@ if __name__ == "__main__":
 
 
 def max_food(building: Building) -> int:
-    print(building)
+    cloned_building = deepcopy(building)
+    print(cloned_building)
     total_food = 0
-    while building.player_row >= 1:
+    while cloned_building.player_row >= 1:
         print('move -1,0')
-        building.move_player(-1, 0);
-        total_food += building.rooms[building.player_row][building.player_col].food
+        cloned_building.move_player(-1, 0);
+        total_food += cloned_building.rooms[cloned_building.player_row][cloned_building.player_col].food
         # print(total_food)
-    while building.player_col >= 1:
+    while cloned_building.player_col >= 1:
         print('move 0, -1')
-        building.move_player(0, -1);
-        total_food += building.rooms[building.player_row][building.player_col].food
+        cloned_building.move_player(0, -1);
+        total_food += cloned_building.rooms[cloned_building.player_row][cloned_building.player_col].food
         # print(total_food)
     print(total_food)
     """returns the maximum number of food that can be collected from given building"""
