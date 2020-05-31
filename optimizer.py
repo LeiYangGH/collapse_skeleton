@@ -32,26 +32,34 @@ def is_direction_valid(building: Building, delta):
 
 directions_lst = [(0, -1), (0, 1), (-1, 0), (1, 0)]
 
+playerPosition_maxFood_dict = {}
+
 
 def calc_max_food(building: Building) -> int:
     sys.stdout.write('.')
     sys.stdout.flush()
     global directions_lst
     current_position_food = building.rooms[building.player_row][building.player_col].food
-    if building.can_move():
-        valid_directions = [d for d in directions_lst if is_direction_valid(building, d)]
-        # print(f'valid_directions={valid_directions}')
-        all_sub_foods = []
-        for (dr, dc) in valid_directions:
-            # print((dr, dc))
-            cloned_building = deepcopy(building)
-            # print(f'player at {cloned_building.player_row} {cloned_building.player_col}')
-            cloned_building.move_player(dr, dc)
-            all_sub_foods.append(calc_max_food(cloned_building))
-
-        return max(all_sub_foods) + current_position_food
+    player_position = (building.player_row, building.player_col)
+    if player_position in playerPosition_maxFood_dict:
+        return playerPosition_maxFood_dict[player_position]
     else:
-        return current_position_food
+        if building.can_move():
+            valid_directions = [d for d in directions_lst if is_direction_valid(building, d)]
+            # print(f'valid_directions={valid_directions}')
+            all_sub_foods = []
+            for (dr, dc) in valid_directions:
+                # print((dr, dc))
+                cloned_building = deepcopy(building)
+                # print(f'player at {cloned_building.player_row} {cloned_building.player_col}')
+                cloned_building.move_player(dr, dc)
+                all_sub_foods.append(calc_max_food(cloned_building))
+            sub_max = max(all_sub_foods) + current_position_food
+            playerPosition_maxFood_dict[player_position] = sub_max
+            return sub_max
+        else:
+            playerPosition_maxFood_dict[player_position] = current_position_food
+            return current_position_food
 
 
 def max_food(building: Building) -> int:
