@@ -39,6 +39,7 @@ def calc_max_food(building: Building) -> int:
     sys.stdout.write('.')
     sys.stdout.flush()
     global directions_lst
+    global playerPosition_maxFood_dict
     current_position_food = building.rooms[building.player_row][building.player_col].food
     player_position = (building.player_row, building.player_col)
     if player_position in playerPosition_maxFood_dict:
@@ -64,7 +65,10 @@ def calc_max_food(building: Building) -> int:
 
 def max_food(building: Building) -> int:
     print(building)
-    return calc_max_food(building)
+    global playerPosition_maxFood_dict
+    max_food = calc_max_food(building)
+    # print(len(playerPosition_maxFood_dict))
+    return max_food
     """returns the maximum number of food that can be collected from given building"""
     # return building.size * 10  # dummy implementation - replace
 
