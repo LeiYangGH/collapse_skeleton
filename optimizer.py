@@ -64,9 +64,9 @@ def calc_max_food(building: Building) -> int:
 
 def max_food(building: Building) -> int:
     print(building)
-    print(calc_max_food(building))
+    return calc_max_food(building)
     """returns the maximum number of food that can be collected from given building"""
-    return building.size * 10  # dummy implementation - replace
+    # return building.size * 10  # dummy implementation - replace
 
 
 def max_supplies(building: Building) -> int:
