@@ -33,6 +33,7 @@ def is_direction_valid(building: Building, delta):
 directions_lst = [(0, -1), (0, 1), (-1, 0), (1, 0)]
 
 playerPosition_maxFood_dict = {}
+max_path_foods = []
 
 
 def calc_max_food(building: Building) -> int:
@@ -56,6 +57,7 @@ def calc_max_food(building: Building) -> int:
                 cloned_building.move_player(dr, dc)
                 all_sub_foods.append(calc_max_food(cloned_building))
             sub_max = max(all_sub_foods) + current_position_food
+            max_path_foods.append(current_position_food)
             playerPosition_maxFood_dict[player_position] = sub_max
             return sub_max
         else:
@@ -66,7 +68,11 @@ def calc_max_food(building: Building) -> int:
 def max_food(building: Building) -> int:
     print(building)
     global playerPosition_maxFood_dict
+    global max_path_foods
+    playerPosition_maxFood_dict = {}
+    max_path_foods = []
     max_food = calc_max_food(building)
+    print(max_path_foods)
     # print(len(playerPosition_maxFood_dict))
     return max_food
     """returns the maximum number of food that can be collected from given building"""
